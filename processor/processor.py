@@ -1,7 +1,14 @@
 import pika
 import time
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+while True:
+    try:
+        connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+        break
+    except pika.exceptions.AMQPConnectionError:
+        print(" [!] Waiting for RabbitMQ to be ready...")
+        time.sleep(3)
+
 channel = connection.channel()
 channel.queue_declare(queue='lightIntensityQueue')
 channel.queue_declare(queue='lightAlertQueue')
