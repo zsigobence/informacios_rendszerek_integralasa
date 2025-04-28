@@ -1,0 +1,22 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  generator:
+    build: ./generator
+    depends_on:
+      - rabbitmq
+
+  processor:
+    build: ./processor
+    depends_on:
+      - rabbitmq
+
+  alert:
+    build: ./alert
+    depends_on:
+      - rabbitmq
